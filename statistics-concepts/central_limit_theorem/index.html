@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Central Limit Theorem Demo</title>
+	<script type="text/javascript">
+		function simulate() {
+			// Get the input values
+			var populationMean = Number(document.getElementById("population-mean").value);
+			var populationStdDev = Number(document.getElementById("population-stddev").value);
+			var sampleSize = Number(document.getElementById("sample-size").value);
+			var numSamples = Number(document.getElementById("num-samples").value);
+
+			// Initialize variables for calculating the sample means
+			var sampleMeans = [];
+			var sumOfSampleMeans = 0;
+
+			// Simulate the sampling process and calculate the sample means
+			for (var i = 0; i < numSamples; i++) {
+				var sampleSum = 0;
+				for (var j = 0; j < sampleSize; j++) {
+					// Generate a random value from the population
+					var value = populationMean + populationStdDev * (Math.random() * 2 - 1);
+					// Add the value to the sample sum
+					sampleSum += value;
+				}
+				// Calculate the sample mean and add it to the array of sample means
+				var sampleMean = sampleSum / sampleSize;
+				sampleMeans.push(sampleMean);
+				sumOfSampleMeans += sampleMean;
+			}
+
+			// Calculate the mean and standard deviation of the sample means
+			var sampleMeansMean = sumOfSampleMeans / numSamples;
+			var sampleMeansStdDev = 0;
+			for (var i = 0; i < numSamples; i++) {
+				sampleMeansStdDev += Math.pow(sampleMeans[i] - sampleMeansMean, 2);
+			}
+			sampleMeansStdDev = Math.sqrt(sampleMeansStdDev / (numSamples - 1));
+
+			// Display the results
+			document.getElementById("sample-means-mean").textContent = sampleMeansMean.toFixed(2);
+			document.getElementById("sample-means-stddev").textContent = sampleMeansStdDev.toFixed(2);
+		}
+	</script>
+</head>
+<body>
+	<h1>Central Limit Theorem Demo</h1>
+	<p>Enter the population mean, population standard deviation, sample size, and number of samples to see the central limit theorem in action.</p>
+	<form>
+		<label for="population-mean">Population Mean:</label>
+		<input type="number" id="population-mean" value="0" step="0.1">
+		<br>
+		<label for="population-stddev">Population Standard Deviation:</label>
+		<input type="number" id="population-stddev" value="1" step="0.1">
+		<br>
+		<label for="sample-size">Sample Size:</label>
+		<input type="number" id="sample-size" value="10">
+		<br>
+		<label for="num-samples">Number of Samples:</label>
+		<input type="number" id="num-samples" value="1000">
+		<br>
+		<input type="button" value="Simulate" onclick="simulate()">
+	</form>
+	<p>Sample Means Mean: <span id="sample-means-mean">-</span></p>
+	<p>Sample Means Standard Deviation: <span id="sample-means-stddev">-</span></p>
+</body>
+</html>
